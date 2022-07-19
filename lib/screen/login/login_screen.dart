@@ -45,9 +45,9 @@ class Login extends StatelessWidget {
           TextContainer(
             child: SizedBox(
               child: TextButton(
-                  child: const Text("login",
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () {}),
+                  child: const Text("login",style: TextStyle(color: Colors.white)),
+                      onPressed: () =>Navigator.pushReplacementNamed(context, "eventosPro")
+                  ),
               width: double.infinity,
             ),
             color: selectColor,

@@ -3,6 +3,7 @@ import 'package:app_scanner/provider/auth/user_provider.dart';
 import 'package:app_scanner/provider/evento/evento_provider.dart';
 import 'package:app_scanner/screen/eventosproximos/eventos_proximos.dart';
 import 'package:app_scanner/screen/login/login_screen.dart';
+import 'package:app_scanner/screen/lugar/lugar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,10 +36,11 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         ),
       ),
-      initialRoute: "eventosPro",
+      initialRoute: "login",
       routes: {
         "login": (BuildContext ctx) => Login(),
         "eventosPro": (BuildContext ctx) => EventosProximos(),
+        "lugar": (BuildContext ctx) =>Lugar(),
       },
     );
   }

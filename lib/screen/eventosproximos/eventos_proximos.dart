@@ -1,4 +1,6 @@
+import 'package:app_scanner/const/config.dart' as config;
 import 'package:app_scanner/provider/evento/evento_provider.dart';
+import 'package:app_scanner/widget/NavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +9,7 @@ class EventosProximos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final eventop = Provider.of<Evento>(context, listen: false);
+    final eventop = Provider.of<Evento>(context, listen: true);
 
     return Scaffold(
         appBar: AppBar(
@@ -15,19 +17,30 @@ class EventosProximos extends StatelessWidget {
           centerTitle: true,
         ),
         body: ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: eventop.eventosProximos.length,
-          itemBuilder: (context, index) => Container(
             padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            height: 200,
-            width: double.infinity,
-            decoration: Card(),
-            child: Row(
-              children: [ImagePoster(), Description()],
-            ),
-          ),
-        ));
+            itemCount: eventop.eventosProximos.length,
+            itemBuilder: (context, index) {
+              final evento = eventop.eventosProximos[index];
+              return GestureDetector(
+                onTap: () => Navigator.pushNamed(context, "lugar",arguments: evento),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  height: 200,
+                  width: double.infinity,
+                  decoration: Card(),
+                  child: Row(
+                    children: [
+                      ImagePoster(idEVento: evento.id),
+                      Description(
+                          title: evento.titulo, description: evento.descripcion)
+                    ],
+                  ),
+                ),
+              );
+            }),
+            drawer: NavBar(),
+      );  
   }
 
   // Styles
@@ -42,7 +55,12 @@ class EventosProximos extends StatelessWidget {
 class Description extends StatelessWidget {
   const Description({
     Key? key,
+    required this.title,
+    required this.description,
   }) : super(key: key);
+
+  final String title;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +71,12 @@ class Description extends StatelessWidget {
         height: double.infinity,
         child: Column(
           children: [
-            Text("Los kjarkas en conciertos",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(title,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 maxLines: 2),
             SizedBox(height: 5),
-            Text(
-                "Magna anim consectetur irure et do Lorem. Anim nulla aute nisi laboris elit aliquip magna tempor. Veniam sunt labore est id ea. Pariatur id deserunt eiusmod cupidatat nisi eu culpa commodo Lorem anim aliqua aute. Do voluptate aliqua laborum nulla ad eu excepteur amet eu sit proident aliquip. Tempor pariatur dolor fugiat Lorem non laborum.",
-                maxLines: 5,
-                textAlign: TextAlign.justify)
+            Text(description, maxLines: 5, textAlign: TextAlign.justify)
           ],
         ),
       ),
@@ -69,9 +85,9 @@ class Description extends StatelessWidget {
 }
 
 class ImagePoster extends StatelessWidget {
-  const ImagePoster({
-    Key? key,
-  }) : super(key: key);
+  final int idEVento;
+
+  ImagePoster({Key? key, required this.idEVento}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +96,8 @@ class ImagePoster extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: FadeInImage(
-          placeholder: AssetImage("assets/image/loading.png"),
-          image: NetworkImage("https://via.placeholder.com/300"),
+          placeholder: const AssetImage("assets/image/loading.png"),
+          image: NetworkImage("${config.imageEvent}/$idEVento"),
           fit: BoxFit.cover,
         ),
       ),
